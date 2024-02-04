@@ -30,7 +30,7 @@ public class AuthController {
         return authService.saveUser(user);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> getToken(final @RequestBody AuthUserDTO user) {
         try {
             authenticationManager.authenticate(
