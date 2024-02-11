@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -37,7 +36,10 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
             return ResponseEntity.ok(authService.generateToken(user.getUsername()));
-        } catch (final AuthenticationException e) {
+        } catch (final JwtAuthenticationException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Generating token error", FORBIDDEN);
+        } catch (final Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Invalid credentials", FORBIDDEN);
         }

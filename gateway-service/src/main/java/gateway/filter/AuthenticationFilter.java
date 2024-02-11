@@ -2,6 +2,7 @@ package gateway.filter;
 
 import gateway.model.JwtConfigModel;
 import gateway.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -12,10 +13,11 @@ import java.util.Optional;
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
-    private final JwtConfigModel configModel;
+    private final JwtConfigModel model;
 
-    public AuthenticationFilter(final JwtConfigModel configModel) {
-        this.configModel = configModel;
+    @Autowired
+    public AuthenticationFilter(final JwtConfigModel model) {
+        this.model = model;
     }
 
     @Override
@@ -35,9 +37,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 try {
-                    JwtUtil.validateToken(token, configModel.getSecretKey());
+                    JwtUtil.validateToken(token, model.getSecretKey());
                 } catch (final Exception e) {
-                    throw new RuntimeException("Error while validating token");
+                    throw new RuntimeException("Error while validating token", e);
                 }
             }
             return chain.filter(exchange);

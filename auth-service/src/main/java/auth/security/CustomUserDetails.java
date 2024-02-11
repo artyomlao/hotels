@@ -8,8 +8,8 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
     public CustomUserDetails(final UserEntity userEntity) {
         this.username = userEntity.getName();

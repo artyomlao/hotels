@@ -22,6 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Optional<UserEntity> credential = repository.findByName(username);
         return credential.map(CustomUserDetails::new).orElseThrow(() ->
-                new UsernameNotFoundException("User not found with name :" + username));
+                new UsernameNotFoundException("User not found with name: " + username));
     }
 }

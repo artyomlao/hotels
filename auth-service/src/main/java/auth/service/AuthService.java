@@ -4,6 +4,7 @@ import auth.model.entity.UserEntity;
 import auth.model.exception.JwtAuthenticationException;
 import auth.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,11 @@ public class AuthService {
     }
 
     public String generateToken(final String username) {
-        return jwtService.generateToken(username);
+        try {
+            return jwtService.generateToken(username);
+        } catch (final Exception e) {
+            throw new JwtAuthenticationException("Generating token error", HttpStatus.FORBIDDEN, e);
+        }
     }
 
     public boolean validateToken(final HttpServletRequest request) throws JwtAuthenticationException {
